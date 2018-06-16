@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Test MQTT</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.js"></script>
+
+</head>
+
+<body>
+    <div class="container-fluid" id="header">
+        <button type="button" class="btn" id="md1">
+            <label>MD1</label>
+        </button>
+        <button type="button" class="btn" id="md2">
+            <label>MD2</label>
+        </button>
+        <br />
+        <div id="table1" class="table">
+        </div>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        var client = new Paho.MQTT.Client("10.0.0.8", Number(1884), "");
+
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+        client.connect({ onSuccess: onConnect });
+
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            console.log("onConnect");
+            client.subscribe("city/devices/+");
+            message = new Paho.MQTT.Message("Hello");
+            message.destinationName = "city/devices/dashboard";
+            client.send(message);
+        };
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0)
+                console.log("onConnectionLost:" + responseObject.errorMessage);
+        };
+        function onMessageArrived(message) {
+            console.log("onMessageArrived:" + message.payloadString);
+            //client.disconnect();
+            var table1 = $("#table1")[0];
+
+            var row = $("<div class='row'/>").text(message.destinationName +": " +message.payloadString);
+            table1.append(row[0]);
+        };
+
+        $('#md1').click(function () {
+            message = new Paho.MQTT.Message("motion");
+            message.destinationName = "city/devices/md1";
+            client.send(message);
+        });
+
+        $('#md2').click(function () {
+            message = new Paho.MQTT.Message("motion");
+            message.destinationName = "city/devices/md2";
+            client.send(message);
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>
