@@ -1,0 +1,9 @@
+socmnd/name/power#name=the Topic written in the lamp
+sonoff usage best in this sites:
+	https://github.com/arendst/Sonoff-Tasmota/wiki/Commands#main
+	https://github.com/arendst/Sonoff-Tasmota/wiki/MQTT-Overview
+use the motion detector with md1 and 4
+logic controls everything, it gets all the data and disttibutes orders
+each sensor has code and each bulb has one
+city/devices is the main channel
+write names for the sensors and their ports
