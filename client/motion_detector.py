@@ -29,7 +29,7 @@ client.on_connect = on_connect
 # client.on_message = on_message
 
 #client.connect("iot.eclipse.org", 1883, 60)
-client.connect("192.168.31.200", 1883, 60)
+client.connect("192.168.31.105", 1883, 60)
 pir=MotionSensor(portId)
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.

@@ -32,7 +32,7 @@ client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
 client.on_message = on_message
 #client.connect("iot.eclipse.org", 1883, 60)
-client.connect("192.168.31.200", 1883, 60)
+client.connect("192.168.31.105", 1883, 60)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
@@ -41,9 +41,7 @@ client.connect("192.168.31.200", 1883, 60)
 client.loop_start()
 try:
     while True:
-        text = input("")            
-        if text == "q":
-            break
+        x=3                   
 finally:
     client.loop_stop()
     client.disconnect()

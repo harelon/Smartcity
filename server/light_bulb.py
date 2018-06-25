@@ -4,12 +4,10 @@ import paho.mqtt.client as mqtt
 
 parser = argparse.ArgumentParser(description='Start a light bulb device')
 parser.add_argument('name', help='the name of the light bulb device')
-parser.add_argument('port', metavar='port',type=int, nargs=1, help='GPIO port BCM')
 
 args = parser.parse_args()
 
 devicename = args.name
-portId = args.port
 
 light_timeout = 10
 
@@ -33,16 +31,15 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+msg.payload.decode())
     if msg.topic == "city/devices/" + devicename and msg.payload.decode() == "on":
         is_light_turned_on = True
-        client.publish("cmnd/sonoff/power", "1") 
+        client.publish("cmnd/"+devicename+"/power", "1") 
         turn_on_time = time.time()
         print("Turning light on")
 
 client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
 client.on_message = on_message
-led=LED(portId)
 #client.connect("iot.eclipse.org", 1883, 60)
-client.connect("192.168.31.200", 1883, 60)
+client.connect("192.168.31.105", 1883, 60)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
