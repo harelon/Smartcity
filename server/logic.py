@@ -4,21 +4,21 @@ lastLightMessage=False
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-
-    client.subscribe("+/")
+        
     client.subscribe("city/devices/+")
     client.publish("city/devices/logic", "logic connected")
 
 def on_message(client, userdata, msg):   
     global lastLightMessage
     print(msg.topic+" "+msg.payload.decode())
-    if msg.topic=="city/devices/ldr1" and msg.payload.decode()== "lighty":
+    if msg.topic=="city/devices/ldr" and msg.payload.decode()== "lighty":
         lastLightMessage=True
-    elif msg.topic=="city/devices/ldr1" and msg.payload.decode()== "darky":
+    elif msg.topic=="city/devices/ldr" and msg.payload.decode()== "darky":
         lastLightMessage=False
     if not lastLightMessage:
-        if msg.topic == "city/devices/md1" and msg.payload.decode() == "Moition detected":
-            client.publish("city/devices/ldr1", "on")               
+        if msg.topic == "city/devices/mds/+" and msg.payload.decode() == "Moition detected":
+            id=msg.topic[len(msg.topic)-1]
+            client.publish("city/devices/lb/"+id, "on")               
 
 client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
@@ -31,7 +31,7 @@ client.connect(ip, 1883, 60)
 client.loop_start()
 try:
     while True:
-        x=3                   
+        pass                          
 finally:
     client.loop_stop()
     client.disconnect()

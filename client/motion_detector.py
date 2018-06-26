@@ -17,8 +17,8 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.    
-    client.subscribe("city/devices/" + devicename)
-    client.publish("city/devices/"+devicename, devicename + " connected")
+    client.subscribe("city/devices/mds/" + devicename)
+    client.publish("city/devices/mds/"+devicename, devicename + " connected")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -42,7 +42,7 @@ try:
         sleep(1)
         if pir.motion_detected:
             text = "Moition detected"
-            client.publish("city/devices/"+devicename, text)
+            client.publish("city/devices/mds/"+devicename, text)
             
 finally:
     client.loop_stop()

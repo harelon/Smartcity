@@ -18,8 +18,8 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("city/devices/ldr1")
-    client.publish("city/devices/ldr1", "ldr1 connected")
+    client.subscribe("city/devices/ldr")
+    client.publish("city/devices/ldr", "ldr connected")
 
 client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
@@ -41,9 +41,9 @@ try:
         val = apds.readAmbientLight()
         if not val == oval:
             if val>100:
-                client.publish("city/devices/ldr1","lighty")
+                client.publish("city/devices/ldr","lighty")
             else:
-                client.publish("city/devices/ldr1","darky")           
+                client.publish("city/devices/ldr","darky")           
             oval = val            
 finally:
     client.loop_stop()
