@@ -18,16 +18,17 @@ def on_message(client, userdata, msg):
     if not lastLightMessage:
         if msg.topic == "city/devices/mds/+" and msg.payload.decode() == "Moition detected":
             topicsplit=msg.topic.split("/")
-            id=int(topicsplit[len(topicsplit)-1])
+            #id=int(topicsplit[len(topicsplit)-1])
+            id=topicsplit[len(topicsplit)-1]
             client.publish("city/devices/lb/"+id, "on")               
 
 client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
 client.on_message = on_message
 #read from a file to get the ip of the server
-f = open('server/ips.txt')
-ip=f.readline().rstrip()
-client.connect(ip, 1883, 60)
+with open('/home/pi/server/ips.txt') as f:
+    ip = f.readline().rstrip()
+    client.connect(ip, 1883, 60)
 
 client.loop_start()
 try:

@@ -17,7 +17,7 @@ updateScript.close()
 
 runScript=open("Run.cmd","w")
 runScript.write(
-"""start c:\Windows\System32\\bash.exe -c "ssh pi@"""+ClientIp+ """ python3 client/motion_detector.py 1 4"
+"""start c:\Windows\System32\\bash.exe -c "ssh pi@"""+ClientIp+ """ python3 client/motion_detector.py sonoff 4"
 start c:\Windows\System32\\bash.exe -c "ssh pi@"""+ClientIp+ """ python3 client/light_detector.py" 
 
 start c:\Windows\System32\\bash.exe -c "ssh pi@"""+ServerIp+""" python3 server/logic.py"
