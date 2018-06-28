@@ -1,0 +1,1 @@
+pkill -ef "python3 client/motion_detector.py"; pkill -ef "python3 client/light_detector.py"

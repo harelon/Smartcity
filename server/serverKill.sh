@@ -1,0 +1,1 @@
+pkill -ef "python3 server/logic.py"; pkill -ef "python3 server/light_bulb.py"

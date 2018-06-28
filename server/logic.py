@@ -5,7 +5,7 @@ lastLightMessage=False
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
         
-    client.subscribe("city/devices/+")
+    client.subscribe("city/devices/#")
     client.publish("city/devices/logic", "logic connected")
 
 def on_message(client, userdata, msg):   
@@ -17,7 +17,8 @@ def on_message(client, userdata, msg):
         lastLightMessage=False
     if not lastLightMessage:
         if msg.topic == "city/devices/mds/+" and msg.payload.decode() == "Moition detected":
-            id=msg.topic[len(msg.topic)-1]
+            topicsplit=msg.topic.split("/")
+            id=int(topicsplit[len(topicsplit)-1])
             client.publish("city/devices/lb/"+id, "on")               
 
 client = mqtt.Client(protocol=mqtt.MQTTv31)
