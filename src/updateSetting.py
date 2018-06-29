@@ -1,16 +1,29 @@
 import subprocess
+import argparse
+import json
+
+parser = argparse.ArgumentParser(description='Start updating ips')
+parser.add_argument('site', help='The location you are in')
+
+args = parser.parse_args()
+
+siteJson ="../config/" + args.site + ".json"
+
+with open(siteJson) as f:
+    data = json.load(f)
+
+ServerIp=data["IPs"]["ServerIp"]
+ClientIp=data["IPs"]["ClientIp"]
 
 updateScript=open("update.sh","w")
-Ips=open("ips.txt","r")
-lines = Ips.readlines()
-ServerIp=lines[0].rstrip()
-ClientIp=lines[1].rstrip()
+
 updateScript.write(
-"""cd /mnt/c/Users/harel/Desktop/Smartcity
-echo Updating client..
-scp -r client/* pi@"""+ClientIp+""":client/
+"""echo Updating client..
+scp -r ../src/client/* pi@"""+ClientIp+""":client/
+scp -r ../src/common/* pi@"""+ClientIp+""":client/
 echo Updating server..
-scp -r server/* pi@"""+ServerIp+""":server/
+scp -r ../src/server/* pi@"""+ServerIp+""":server/
+scp -r ../src/common/* pi@"""+ServerIp+""":server/
 echo Completed."""
 )
 updateScript.close()
@@ -34,13 +47,5 @@ start c:\Windows\System32\\bash.exe -c "ssh pi@"""+ServerIp+""" sh server/server
 ) 
 killScript.close()
 
-updateIps=open("ipUpdates.sh","w")
-updateIps.write(
-"""cd /mnt/c/Users/harel/Desktop/Smartcity
-scp ips.txt pi@"""+ServerIp+""":server/
-scp ips.txt pi@"""+ClientIp+""":client/
-""")
-updateIps.close()
-
-process = subprocess.Popen('ipUpdates.sh', stdout=subprocess.PIPE , stderr=subprocess.PIPE, shell=True)
-process.wait()
+process = subprocess.call(["scp",siteJson,"pi@"+ServerIp+":server/site.json"])
+process = subprocess.call(["scp",siteJson,"pi@"+ClientIp+":client/site.json"])

@@ -3,6 +3,10 @@ from time import sleep
 import paho.mqtt.client as mqtt
 from gpiozero import MotionSensor
 
+from siteConfig import SiteConfig
+
+siteConfig = SiteConfig()
+
 parser = argparse.ArgumentParser(description='Start a motion detector device')
 parser.add_argument('name', help='the name of the motion detector device')
 parser.add_argument('port', metavar='port',type=int, nargs=1, help='GPIO port BCM')
@@ -27,9 +31,7 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
 #read from a file to get the ip of the server
-f = open('client/ips.txt')
-ip = f.readline().rstrip()
-client.connect(ip, 1883, 60)
+client.connect(siteConfig.ServerIp, 1883, 60)
 pir=MotionSensor(portId)
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
@@ -42,7 +44,7 @@ try:
         sleep(1)
         if pir.motion_detected:
             text = "Moition detected"
-            client.publish("city/devices/mds/"+devicename, text)
+            client.publish("city/devices/mds/"+devicename, text)            
             
 finally:
     client.loop_stop()

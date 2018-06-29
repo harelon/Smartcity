@@ -1,4 +1,7 @@
 import paho.mqtt.client as mqtt
+from siteConfig import SiteConfig
+
+siteConfig = SiteConfig()
 
 lastLightMessage=False
 
@@ -25,10 +28,8 @@ def on_message(client, userdata, msg):
 client = mqtt.Client(protocol=mqtt.MQTTv31)
 client.on_connect = on_connect
 client.on_message = on_message
-#read from a file to get the ip of the server
-with open('/home/pi/server/ips.txt') as f:
-    ip = f.readline().rstrip()
-    client.connect(ip, 1883, 60)
+
+client.connect(siteConfig.ServerIp, 1883, 60)
 
 client.loop_start()
 try:
